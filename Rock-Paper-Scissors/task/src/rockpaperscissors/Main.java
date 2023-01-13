@@ -21,24 +21,77 @@ Take input from the user;
 Find an option that wins over the user's option;
 Output the line: Sorry, but the computer chose <option>.
 * */
+/*
+* Well, now let's do something more tangible. Nobody wants to play the game where you always lose. We can use the power of the Random class to make the game a bit more challenging.
 
+Write a program that reads input from users, chooses a random option, and then says who won: a user or the computer.
+There are a few examples below to provide the output for any outcome (<option> is the option chosen by your program):
+
+Loss: Sorry, but the computer chose <option>;
+Draw: There is a draw (<option>);
+Win: Well done. The computer chose <option> and failed;
+Objectives
+Your program should:
+
+Read the user input that includes an option;
+Choose a random option;
+Compare the options and determine the winner;
+Output one of the lines above depending on the result of the game.
+* */
 package rockpaperscissors;
 
+
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
+
+    static void loss(String option){
+        System.out.println("Sorry, but the computer chose " + option);
+    }
+
+    static void draw(String option){
+        System.out.println("There is a draw (" + option +") ");
+    }
+
+    static void win(String option){
+        System.out.println("Well done. The computer chose "+ option+" and failed");
+    }
     public static void main(String[] args) {
         // write your code here
         Scanner scanner = new Scanner(System.in);
         String userLine = scanner.nextLine();
-        if(userLine.equals("paper")){
-            System.out.println("Sorry, but the computer chose scissors");
+        Random random = new Random();
+        String[] options = new String[]{"rock", "scissors", "paper"};
+        int computerChose = random.nextInt(3);
+
+        //draw
+        if(userLine.equals(options[computerChose])){
+            draw(options[computerChose]);
+
         }
-        if(userLine.equals("scissors")){
-            System.out.println("Sorry, but the computer chose rock");
+        //win
+        if(userLine.equals("scissors") && computerChose == 2){ // random = papier
+            win(options[computerChose]);
         }
-        if(userLine.equals("rock")){
-            System.out.println("Sorry, but the computer chose paper");
+        if(userLine.equals("paper") && computerChose == 0){ // random = rock
+            win(options[computerChose]);
+        }
+        if(userLine.equals("rock") && computerChose == 1){ // random = scissors
+            win(options[computerChose]);
+        }
+
+        //loss
+        if(userLine.equals("scissors") && computerChose == 0){ // random = rock
+            loss(options[computerChose]);
+        }
+        if(userLine.equals("paper") && computerChose == 1){ // random = scissors
+            loss(options[computerChose]);
+        }
+        if(userLine.equals("rock") && computerChose == 2){ // random = paper
+            loss(options[computerChose]);
         }
     }
+
+
 }
