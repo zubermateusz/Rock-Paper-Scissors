@@ -82,20 +82,23 @@ public class Main {
         // write your code here
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
+        String[] options = new String[]{"rock", "scissors", "paper"};
+        String userLine;
 
         for(;;) {
-            String userLine = scanner.nextLine();
-            String[] options = new String[]{"rock", "scissors", "paper"};
+            userLine = scanner.nextLine();
 
             if(userLine.equals("!exit")) {
                 break;
             } else {
                 if(checkUserLine(userLine)) {
                     int computerChose = random.nextInt(3);
+
                     //draw
                     if (userLine.equals(options[computerChose])) {
                         draw(options[computerChose]);
                     }
+
                     //win
                     if ((userLine.equals("scissors") && computerChose == 2) || // random = papier
                             (userLine.equals("paper") && computerChose == 0) || // random = rock
