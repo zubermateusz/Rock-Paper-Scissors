@@ -74,6 +74,10 @@ public class Main {
     static void win(String option){
         System.out.println("Well done. The computer chose "+ option+" and failed");
     }
+
+    static boolean checkUserLine(String line) {
+        return line.equals("rock") || line.equals("scissors") || line.equals("paper");
+    }
     public static void main(String[] args) {
         // write your code here
         Scanner scanner = new Scanner(System.in);
@@ -86,7 +90,7 @@ public class Main {
             if(userLine.equals("!exit")) {
                 break;
             } else {
-                if(userLine.equals("rock") || userLine.equals("scissors") || userLine.equals("paper")) {
+                if(checkUserLine(userLine)) {
                     int computerChose = random.nextInt(3);
                     //draw
                     if (userLine.equals(options[computerChose])) {
