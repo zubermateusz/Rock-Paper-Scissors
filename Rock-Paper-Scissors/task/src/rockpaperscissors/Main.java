@@ -38,6 +38,23 @@ Choose a random option;
 Compare the options and determine the winner;
 Output one of the lines above depending on the result of the game.
 * */
+/*
+* We came up with a really cool idea in the previous stage. But the game is really short. Nobody plays a single shot of rock paper scissors. We need to find a way to run the game forever. Not literally, though — let's implement a way to stop your program.
+
+Improve your program so that it will take an unlimited number of inputs until users enter !exit. After entering !exit, the program should print Bye! and terminate. Also, let's try to handle invalid inputs: your program should be ready to handle typos in user input, or when there's a mishmash instead of a normal command. So, if the input doesn't correspond to any known command (an option or !exit), your program should output the following line: Invalid input.
+
+Objectives
+Your program should:
+
+Take input from users;
+If the input contains !exit, output Bye! and stop the game;
+If the input is the name of the option, then pick a random option and output a line with the result of the game in the following format (<option> is the name of the option chosen by the program):
+Loss: Sorry, but the computer chose <option>
+Draw: There is a draw (<option>)
+Win: Well done. The computer chose <option> and failed
+If the input corresponds to anything else, output Invalid input;
+Repeat it all over again.*/
+
 package rockpaperscissors;
 
 
@@ -60,38 +77,50 @@ public class Main {
     public static void main(String[] args) {
         // write your code here
         Scanner scanner = new Scanner(System.in);
-        String userLine = scanner.nextLine();
         Random random = new Random();
-        String[] options = new String[]{"rock", "scissors", "paper"};
-        int computerChose = random.nextInt(3);
 
-        //draw
-        if(userLine.equals(options[computerChose])){
-            draw(options[computerChose]);
+        for(;;) {
+            String userLine = scanner.nextLine();
+            String[] options = new String[]{"rock", "scissors", "paper"};
 
-        }
-        //win
-        if(userLine.equals("scissors") && computerChose == 2){ // random = papier
-            win(options[computerChose]);
-        }
-        if(userLine.equals("paper") && computerChose == 0){ // random = rock
-            win(options[computerChose]);
-        }
-        if(userLine.equals("rock") && computerChose == 1){ // random = scissors
-            win(options[computerChose]);
-        }
+            if(userLine.equals("!exit")) {
+                break;
+            } else {
+                if(userLine.equals("rock") || userLine.equals("scissors") || userLine.equals("paper")) {
+                    int computerChose = random.nextInt(3);
+                    //draw
+                    if (userLine.equals(options[computerChose])) {
+                        draw(options[computerChose]);
+                    }
+                    //win
+                    if (userLine.equals("scissors") && computerChose == 2) { // random = papier
+                        win(options[computerChose]);
+                    }
+                    if (userLine.equals("paper") && computerChose == 0) { // random = rock
+                        win(options[computerChose]);
+                    }
+                    if (userLine.equals("rock") && computerChose == 1) { // random = scissors
+                        win(options[computerChose]);
+                    }
 
-        //loss
-        if(userLine.equals("scissors") && computerChose == 0){ // random = rock
-            loss(options[computerChose]);
+                    //loss
+                    if (userLine.equals("scissors") && computerChose == 0) { // random = rock
+                        loss(options[computerChose]);
+                    }
+                    if (userLine.equals("paper") && computerChose == 1) { // random = scissors
+                        loss(options[computerChose]);
+                    }
+                    if (userLine.equals("rock") && computerChose == 2) { // random = paper
+                        loss(options[computerChose]);
+                    }
+                } else {
+                    System.out.println("Invalid input");
+                }
+            }
         }
-        if(userLine.equals("paper") && computerChose == 1){ // random = scissors
-            loss(options[computerChose]);
-        }
-        if(userLine.equals("rock") && computerChose == 2){ // random = paper
-            loss(options[computerChose]);
-        }
+        System.out.println("Bye!");
     }
+
 
 
 }
