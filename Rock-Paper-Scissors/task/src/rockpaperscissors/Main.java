@@ -93,24 +93,16 @@ public class Main {
                         draw(options[computerChose]);
                     }
                     //win
-                    if (userLine.equals("scissors") && computerChose == 2) { // random = papier
-                        win(options[computerChose]);
-                    }
-                    if (userLine.equals("paper") && computerChose == 0) { // random = rock
-                        win(options[computerChose]);
-                    }
-                    if (userLine.equals("rock") && computerChose == 1) { // random = scissors
+                    if ((userLine.equals("scissors") && computerChose == 2) || // random = papier
+                            (userLine.equals("paper") && computerChose == 0) || // random = rock
+                            (userLine.equals("rock") && computerChose == 1)){ // random = scissors
                         win(options[computerChose]);
                     }
 
                     //loss
-                    if (userLine.equals("scissors") && computerChose == 0) { // random = rock
-                        loss(options[computerChose]);
-                    }
-                    if (userLine.equals("paper") && computerChose == 1) { // random = scissors
-                        loss(options[computerChose]);
-                    }
-                    if (userLine.equals("rock") && computerChose == 2) { // random = paper
+                    if ((userLine.equals("scissors") && computerChose == 0) ||// random = rock
+                            (userLine.equals("paper") && computerChose == 1) ||// random = scissors
+                            (userLine.equals("rock") && computerChose == 2)) { // random = paper
                         loss(options[computerChose]);
                     }
                 } else {
