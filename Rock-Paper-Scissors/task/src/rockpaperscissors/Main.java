@@ -69,9 +69,22 @@ public class Main {
         private String name;
         private int score;
 
-        public User(){
-
+        public User(String name){
+            this.name = name;
         }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        public void setScore(int score) {
+            this.score = score;
+        }
+
     }
     static void loss(String option){
         System.out.println("Sorry, but the computer chose " + option);
