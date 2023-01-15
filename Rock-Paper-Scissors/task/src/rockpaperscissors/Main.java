@@ -61,8 +61,18 @@ package rockpaperscissors;
 import java.util.Random;
 import java.util.Scanner;
 
+
 public class Main {
 
+    public class User {
+
+        private String name;
+        private int score;
+
+        public User(){
+
+        }
+    }
     static void loss(String option){
         System.out.println("Sorry, but the computer chose " + option);
     }
