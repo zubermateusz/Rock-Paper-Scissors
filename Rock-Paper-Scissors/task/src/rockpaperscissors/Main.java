@@ -94,11 +94,11 @@ public class Main {
         }
 
         public void userWin() {
-            this.score += 100;
+            this.score = this.score + 100;
         }
 
         public void userDraw() {
-            this.score += 50;
+            this.score = this.score + 50;
         }
     }
     static void loss(String option){
