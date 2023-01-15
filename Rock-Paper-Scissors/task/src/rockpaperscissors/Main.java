@@ -74,7 +74,7 @@ public class Main {
         public User(int id, String name){
             this.id = id;
             this.name = name;
-            this.score = 0;
+            this.score = 350;
         }
 
         public String getName() {
@@ -94,11 +94,11 @@ public class Main {
         }
 
         public void userWin() {
-            this.score = this.score + 100;
+            this.score += 100;
         }
 
         public void userDraw() {
-            this.score = this.score + 50;
+            this.score += 50;
         }
     }
     static void loss(String option){
@@ -135,7 +135,7 @@ public class Main {
         // write your code here
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
-        String[] options = new String[]{"rock", "scissors", "paper"};
+        String[] options = new String[]{"paper", "scissors", "rock"};
         String userLine;
 
         System.out.println("Enter your name:");
@@ -160,17 +160,17 @@ public class Main {
                     }
 
                     //win
-                    if ((userLine.equals("scissors") && computerChose == 2) || // random = papier
-                            (userLine.equals("paper") && computerChose == 0) || // random = rock
+                    if ((userLine.equals("scissors") && computerChose == 0) || // random = papier
+                            (userLine.equals("paper") && computerChose == 2) || // random = rock
                             (userLine.equals("rock") && computerChose == 1)){ // random = scissors
                         win(options[computerChose]);
                         listOfUsers.get(userId).userWin();
                     }
 
                     //loss
-                    if ((userLine.equals("scissors") && computerChose == 0) ||// random = rock
+                    if ((userLine.equals("scissors") && computerChose == 2) ||// random = rock
                             (userLine.equals("paper") && computerChose == 1) ||// random = scissors
-                            (userLine.equals("rock") && computerChose == 2)) { // random = paper
+                            (userLine.equals("rock") && computerChose == 0)) { // random = paper
                         loss(options[computerChose]);
                     }
 
