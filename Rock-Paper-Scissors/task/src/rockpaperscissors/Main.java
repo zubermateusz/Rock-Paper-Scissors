@@ -58,18 +58,21 @@ Repeat it all over again.*/
 package rockpaperscissors;
 
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
 
 public class Main {
 
-    public class User {
+    public static class User {
 
         private String name;
         private int score;
+        private int id;
 
-        public User(String name){
+        public User(int id, String name){
+            this.id = id;
             this.name = name;
         }
 
@@ -85,6 +88,9 @@ public class Main {
             this.score = score;
         }
 
+        public int getId() {
+            return id;
+        }
     }
     static void loss(String option){
         System.out.println("Sorry, but the computer chose " + option);
@@ -101,12 +107,32 @@ public class Main {
     static boolean checkUserLine(String line) {
         return line.equals("rock") || line.equals("scissors") || line.equals("paper");
     }
+
+    static int checkAndAddNewUser(ArrayList<User> listOfUsers, String userName) {
+        int userId = -1;
+        for (User user : listOfUsers) {
+            if (user.getName().equals(userName)){
+                userId = user.getId();
+            }
+        }
+        if (userId == -1) {
+            userId = listOfUsers.size();
+            listOfUsers.add(new User(userId, userName));
+        }
+        return userId;
+    }
+
     public static void main(String[] args) {
         // write your code here
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
         String[] options = new String[]{"rock", "scissors", "paper"};
         String userLine;
+
+        System.out.println("Enter your name:");
+        ArrayList<User> listOfUsers = new ArrayList<>();
+        String userName = scanner.nextLine();
+        int userId = checkAndAddNewUser(listOfUsers, userName);
 
         for(;;) {
             userLine = scanner.nextLine();
