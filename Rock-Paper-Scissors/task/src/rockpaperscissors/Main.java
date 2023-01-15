@@ -74,6 +74,7 @@ public class Main {
         public User(int id, String name){
             this.id = id;
             this.name = name;
+            this.score = 0;
         }
 
         public String getName() {
@@ -91,6 +92,14 @@ public class Main {
         public int getId() {
             return id;
         }
+
+        public void userWin() {
+            this.score += 100;
+        }
+
+        public void userDraw() {
+            this.score += 50;
+        }
     }
     static void loss(String option){
         System.out.println("Sorry, but the computer chose " + option);
@@ -105,7 +114,7 @@ public class Main {
     }
 
     static boolean checkUserLine(String line) {
-        return line.equals("rock") || line.equals("scissors") || line.equals("paper");
+        return line.equals("rock") || line.equals("scissors") || line.equals("paper") || line.equals("!rating");
     }
 
     static int checkAndAddNewUser(ArrayList<User> listOfUsers, String userName) {
@@ -132,7 +141,8 @@ public class Main {
         System.out.println("Enter your name:");
         ArrayList<User> listOfUsers = new ArrayList<>();
         String userName = scanner.nextLine();
-        int userId = checkAndAddNewUser(listOfUsers, userName);
+        int userId = checkAndAddNewUser(listOfUsers, userName); //check if user name not exist add new and read id
+        System.out.println("Hello, " + listOfUsers.get(userId).getName());
 
         for(;;) {
             userLine = scanner.nextLine();
@@ -146,6 +156,7 @@ public class Main {
                     //draw
                     if (userLine.equals(options[computerChose])) {
                         draw(options[computerChose]);
+                        listOfUsers.get(userId).userDraw();
                     }
 
                     //win
@@ -153,6 +164,7 @@ public class Main {
                             (userLine.equals("paper") && computerChose == 0) || // random = rock
                             (userLine.equals("rock") && computerChose == 1)){ // random = scissors
                         win(options[computerChose]);
+                        listOfUsers.get(userId).userWin();
                     }
 
                     //loss
@@ -160,6 +172,10 @@ public class Main {
                             (userLine.equals("paper") && computerChose == 1) ||// random = scissors
                             (userLine.equals("rock") && computerChose == 2)) { // random = paper
                         loss(options[computerChose]);
+                    }
+
+                    if (userLine.equals("!rating")) {
+                        System.out.println("Your rating: " + listOfUsers.get(userId).getScore());
                     }
                 } else {
                     System.out.println("Invalid input");
