@@ -65,6 +65,8 @@ import java.util.Scanner;
 
 public class Main {
 
+
+    private static String[] options;
     public static class User {
 
         private String name;
@@ -114,7 +116,20 @@ public class Main {
     }
 
     static boolean checkUserLine(String line) {
-        return line.equals("rock") || line.equals("scissors") || line.equals("paper") || line.equals("!rating");
+        boolean flag = false;
+        if (line.equals("!rating")) {
+            return true;
+        } else {
+            int i = 0;
+            while (i < options.length){
+                if (options[i].equals(line)) {
+                    flag = true;
+                    break;
+                }
+                i++;
+            }
+        }
+        return flag;
     }
 
     static int checkAndAddNewUser(ArrayList<User> listOfUsers, String userName) {
@@ -135,7 +150,6 @@ public class Main {
         // write your code here
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
-        String[] options = new String[]{"paper", "scissors", "rock"};
         String userLine;
 
         System.out.println("Enter your name:");
@@ -143,6 +157,7 @@ public class Main {
         String userName = scanner.nextLine();
         int userId = checkAndAddNewUser(listOfUsers, userName); //check if user name not exist add new and read id
         System.out.println("Hello, " + listOfUsers.get(userId).getName());
+        options = scanner.nextLine().split(","); // adds options form user
 
         for(;;) {
             userLine = scanner.nextLine();
