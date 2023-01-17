@@ -96,14 +96,13 @@ Restart the game (with the same options defined before the start of the game).
 
 package rockpaperscissors;
 
-
 import java.util.*;
 
 
 public class Main {
 
 
-    private static String[] options;
+    private static ArrayList<String> options;
     public static class User {
 
         private String name;
@@ -158,8 +157,8 @@ public class Main {
             return true;
         } else {
             int i = 0;
-            while (i < options.length){
-                if (options[i].equals(line)) {
+            while (i < options.size()){
+                if (options.get(i).equals(line)) {
                     flag = true;
                     break;
                 }
@@ -183,7 +182,25 @@ public class Main {
         return userId;
     }
 
+    private static int winDrawLoss(String userLine, int computerChose) {
+        int result = -1;
+        int halfOfLengthOptionsArray = options.size() / 2;
 
+
+        int userChoseToComparison = options.indexOf(userLine);
+        int computerChoseToComparison = computerChose;
+
+        if (computerChoseToComparison > userChoseToComparison && computerChoseToComparison < userChoseToComparison + halfOfLengthOptionsArray) {
+            return 0; // loss
+        }
+        if (computerChoseToComparison < userChoseToComparison && computerChoseToComparison > userChoseToComparison - halfOfLengthOptionsArray) {
+            return 2;// win
+        }
+        if (computerChoseToComparison == userChoseToComparison) {
+            return 1; // draw
+        }
+        return result;
+    } // return 0 - loss, 1 - draw, 2 - win
     public static void main(String[] args) {
         // write your code here
         Scanner scanner = new Scanner(System.in);
@@ -195,7 +212,7 @@ public class Main {
         String userName = scanner.nextLine();
         int userId = checkAndAddNewUser(listOfUsers, userName); //check if user name not exist add new and read id
         System.out.println("Hello, " + listOfUsers.get(userId).getName());
-        options = scanner.nextLine().split(","); // adds options form user
+        options.addAll(List.of(scanner.nextLine().split(","))); // adds options form user
         System.out.println("Okay, let's start");
         for(;;) {
             userLine = scanner.nextLine();
@@ -229,18 +246,21 @@ public class Main {
                         loss(options[computerChose]);
                     }
 */
-                    int computerChose = random.nextInt(options.length); //computer drows 1 options
+                    int computerChose = random.nextInt(options.size()); //computer drows 1 options
                     switch (winDrawLoss(userLine, computerChose)) {
+                        case -1 -> {
+                            System.out.println("Something wrong"); break;
+                        }
                         case 0 -> {
-                            loss(options[computerChose]); break;
+                            loss(options.get(computerChose)); break;
                         }
                         case 1 -> {
-                            draw(options[computerChose]);
+                            draw(options.get(computerChose));
                             listOfUsers.get(userId).userDraw();
                             break;
                         }
                         case 2 -> {
-                            win(options[computerChose]);
+                            win(options.get(computerChose));
                             listOfUsers.get(userId).userWin();
                             break;
                         }
