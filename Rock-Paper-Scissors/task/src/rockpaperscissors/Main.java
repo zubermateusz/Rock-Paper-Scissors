@@ -54,15 +54,91 @@ Draw: There is a draw (<option>)
 Win: Well done. The computer chose <option> and failed
 If the input corresponds to anything else, output Invalid input;
 Repeat it all over again.*/
+/*
+* How about new game rules? The original game has a fairly small choice of options.
+
+The extended version of the game makes it hard to draw. Now, your program should accept alternative lists of options, like Rock, Paper, Scissors, Lizard, Spock, and so on. You can take the following options (don't take their relations into account; we'll speak about them further on):
+
+
+
+In this stage, before the game starts, users can choose the options. After entering the name, they should provide a list of the options separated by a comma. For example:
+
+rock,paper,scissors,lizard,spock
+If users input an empty line, start the game with default options: rock, paper, and scissors.
+
+Once the game options are defined, output Okay, let's start.
+
+Regardless of the chosen options, your program, obviously, should identify which option beats which. You can use the following algorithm. First, every option produces a draw when opposed to itself. Secondly, every option beats half of the other options and is defeated by another half. How to determine which options are stronger or weaker? Take the list of options provided by the user and pick the option that you want to know the relationships of. Take all other options from the user's list. Add them to the list of options that precede the chosen option. Now, you have another list of options that don't include the user's option with a different order of elements inside. First are the options that follow the chosen one in the original list; then, there are the ones that precede it. So, in this "new" list, the first half of the options defeat the "chosen" option, and the second half is beaten by it.
+
+Once again, never mind the "links" between the options in the picture above. They are only for illustration purposes
+For example, the user's list of options is rock,paper,scissors,lizard,spock. You want to know what options are weaker than lizard. By looking at the list spock,rock,paper,scissors you realize that spock and rock beat lizard. Paper and scissors are defeated by it. For spock, it'll be almost the same, but it'll get beaten by rock and paper, and prevail over scissors and lizard.
+
+Of course, this is not the most efficient way to determine which option prevails over which. You are welcome to try to develop other methods of tackling this problem.
+
+Objectives
+Your program should:
+
+Output a line Enter your name: . Users enter their names on the same line (not the one following the output);
+Read the input with the username and output Hello, <name>;
+Read rating.txt and check whether it contains an entry with the current username. If yes, use the score specified in the file as a starting point. If not, start the score from 0;
+Read the input with the list of options for the game (options are separated by comma). If the input is an empty line, play with the default options;
+Output a line Okay, let's start;
+Play the game by the rules defined in the previous stages and read the user's input;
+If the input is !exit, output Bye! and stop the game;
+If the input is the name of the option, then pick a random option and output a line with the result of the game in the following format (<option> is the name of the option chosen by the program):
+Loss: Sorry, but the computer chose <option>
+Draw: There is a draw (<option>)
+Win: Well done. The computer chose <option> and failed
+For each draw, add 50 points to the score. For each user's win, add 100 to their score. In case of a loss, don't change the score;
+If input corresponds to anything else, output Invalid input;
+Restart the game (with the same options defined before the start of the game).
+* */
 
 package rockpaperscissors;
 
+import java.util.*;
 
-import java.util.Random;
-import java.util.Scanner;
 
 public class Main {
 
+
+    private static ArrayList<String> options = new ArrayList<>();
+    public static class User {
+
+        private String name;
+        private int score;
+        private int id;
+
+        public User(int id, String name){
+            this.id = id;
+            this.name = name;
+            this.score = 350;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        public void setScore(int score) {
+            this.score = score;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void userWin() {
+            this.score += 100;
+        }
+
+        public void userDraw() {
+            this.score += 50;
+        }
+    }
     static void loss(String option){
         System.out.println("Sorry, but the computer chose " + option);
     }
@@ -76,15 +152,91 @@ public class Main {
     }
 
     static boolean checkUserLine(String line) {
-        return line.equals("rock") || line.equals("scissors") || line.equals("paper");
+        boolean flag = false;
+        if (line.equals("!rating")) {
+            return true;
+        } else {
+            int i = 0;
+            while (i < options.size()){
+                if (options.get(i).equals(line)) {
+                    flag = true;
+                    break;
+                }
+                i++;
+            }
+        }
+        return flag;
     }
+
+    static int checkAndAddNewUser(ArrayList<User> listOfUsers, String userName) {
+        int userId = -1;
+        for (User user : listOfUsers) {
+            if (user.getName().equals(userName)){
+                userId = user.getId();
+            }
+        }
+        if (userId == -1) {
+            userId = listOfUsers.size();
+            listOfUsers.add(new User(userId, userName));
+        }
+        return userId;
+    }
+
+    private static int winDrawLoss(String userLine, int computerChose) {
+        int result = -1;
+        int halfOfLengthOptionsArray = options.size() / 2;
+        int userChoseToComparison = options.indexOf(userLine);
+        int computerChoseToComparison = computerChose;
+
+        if (computerChoseToComparison == userChoseToComparison) {
+            return 1; // draw
+        } else {
+            if (userChoseToComparison <= halfOfLengthOptionsArray) { //first half of options
+                if (userChoseToComparison > computerChoseToComparison) {
+                    return 2; //loss
+                }
+                if (userChoseToComparison + halfOfLengthOptionsArray < computerChoseToComparison) {
+                    return 2; //loss
+                }
+                if (userChoseToComparison + halfOfLengthOptionsArray >= computerChoseToComparison) {
+                    return 0; //win
+                }
+            } else { //second half of options
+                if (userChoseToComparison < computerChoseToComparison) {
+                    return 0; //win
+                }
+                if (userChoseToComparison - halfOfLengthOptionsArray < computerChoseToComparison) {
+                    return 2; //loss
+                }
+                if (userChoseToComparison - halfOfLengthOptionsArray >= computerChoseToComparison) {
+                    return 0; //win
+                }
+            }
+        }
+
+        return result;
+    } // return 0 - loss, 1 - draw, 2 - win
     public static void main(String[] args) {
         // write your code here
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
-        String[] options = new String[]{"rock", "scissors", "paper"};
         String userLine;
 
+        System.out.println("Enter your name:");
+        ArrayList<User> listOfUsers = new ArrayList<>();
+        String userName = scanner.nextLine();
+        int userId = checkAndAddNewUser(listOfUsers, userName); //check if user name not exist add new and read id
+        System.out.println("Hello, " + listOfUsers.get(userId).getName());
+        String[] listOfOptions = scanner.nextLine().split(",");
+
+        if (listOfOptions.length > 1) {
+            options.addAll(Arrays.asList(listOfOptions)); // adds options form user
+        } else {
+            options.addAll(Arrays.asList("rock", "paper", "scissors"));
+        }
+
+
+        System.out.println("Okay, let's start");
         for(;;) {
             userLine = scanner.nextLine();
 
@@ -92,25 +244,55 @@ public class Main {
                 break;
             } else {
                 if(checkUserLine(userLine)) {
+/*
+                    Stage 1-4
                     int computerChose = random.nextInt(3);
 
                     //draw
                     if (userLine.equals(options[computerChose])) {
                         draw(options[computerChose]);
+                        listOfUsers.get(userId).userDraw();
                     }
 
                     //win
-                    if ((userLine.equals("scissors") && computerChose == 2) || // random = papier
-                            (userLine.equals("paper") && computerChose == 0) || // random = rock
+                    if ((userLine.equals("scissors") && computerChose == 0) || // random = papier
+                            (userLine.equals("paper") && computerChose == 2) || // random = rock
                             (userLine.equals("rock") && computerChose == 1)){ // random = scissors
                         win(options[computerChose]);
+                        listOfUsers.get(userId).userWin();
                     }
 
                     //loss
-                    if ((userLine.equals("scissors") && computerChose == 0) ||// random = rock
+                    if ((userLine.equals("scissors") && computerChose == 2) ||// random = rock
                             (userLine.equals("paper") && computerChose == 1) ||// random = scissors
-                            (userLine.equals("rock") && computerChose == 2)) { // random = paper
+                            (userLine.equals("rock") && computerChose == 0)) { // random = paper
                         loss(options[computerChose]);
+                    }
+*/
+                    if (userLine.equals("!rating")) {
+                        System.out.println("Your rating: " + listOfUsers.get(userId).getScore());
+                    } else {
+                        int computerChose = random.nextInt(options.size()); //computer drows 1 options
+                        switch (winDrawLoss(userLine, computerChose)) {
+                            case -1 -> {
+                                System.out.println("Something wrong");
+                                break;
+                            }
+                            case 0 -> {
+                                loss(options.get(computerChose));
+                                break;
+                            }
+                            case 1 -> {
+                                draw(options.get(computerChose));
+                                listOfUsers.get(userId).userDraw();
+                                break;
+                            }
+                            case 2 -> {
+                                win(options.get(computerChose));
+                                listOfUsers.get(userId).userWin();
+                                break;
+                            }
+                        }
                     }
                 } else {
                     System.out.println("Invalid input");
@@ -119,7 +301,4 @@ public class Main {
         }
         System.out.println("Bye!");
     }
-
-
-
 }
