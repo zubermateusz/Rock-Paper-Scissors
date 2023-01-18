@@ -191,8 +191,27 @@ public class Main {
         if (computerChoseToComparison == userChoseToComparison) {
             return 1; // draw
         } else {
-
-
+            if (userChoseToComparison <= halfOfLengthOptionsArray) { //first half of options
+                if (userChoseToComparison > computerChoseToComparison) {
+                    return 2; //loss
+                }
+                if (userChoseToComparison + halfOfLengthOptionsArray < computerChoseToComparison) {
+                    return 2; //loss
+                }
+                if (userChoseToComparison + halfOfLengthOptionsArray >= computerChoseToComparison) {
+                    return 0; //win
+                }
+            } else { //second half of options
+                if (userChoseToComparison < computerChoseToComparison) {
+                    return 0; //win
+                }
+                if (userChoseToComparison - halfOfLengthOptionsArray < computerChoseToComparison) {
+                    return 2; //loss
+                }
+                if (userChoseToComparison - halfOfLengthOptionsArray >= computerChoseToComparison) {
+                    return 0; //win
+                }
+            }
         }
 
         return result;
