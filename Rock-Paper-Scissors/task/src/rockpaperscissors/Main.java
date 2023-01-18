@@ -102,7 +102,7 @@ import java.util.*;
 public class Main {
 
 
-    private static ArrayList<String> options;
+    private static ArrayList<String> options = new ArrayList<>();
     public static class User {
 
         private String name;
@@ -112,7 +112,7 @@ public class Main {
         public User(int id, String name){
             this.id = id;
             this.name = name;
-            this.score = 350;
+            this.score = 0;
         }
 
         public String getName() {
@@ -185,20 +185,33 @@ public class Main {
     private static int winDrawLoss(String userLine, int computerChose) {
         int result = -1;
         int halfOfLengthOptionsArray = options.size() / 2;
-
-
         int userChoseToComparison = options.indexOf(userLine);
         int computerChoseToComparison = computerChose;
 
-        if (computerChoseToComparison > userChoseToComparison && computerChoseToComparison < userChoseToComparison + halfOfLengthOptionsArray) {
-            return 0; // loss
-        }
-        if (computerChoseToComparison < userChoseToComparison && computerChoseToComparison > userChoseToComparison - halfOfLengthOptionsArray) {
-            return 2;// win
-        }
         if (computerChoseToComparison == userChoseToComparison) {
             return 1; // draw
+        } else {
+            if (userChoseToComparison <= halfOfLengthOptionsArray &&
+                    computerChoseToComparison > userChoseToComparison &&
+                    computerChoseToComparison < userChoseToComparison + halfOfLengthOptionsArray) {
+                return 2; //win
+            }
+            if (userChoseToComparison <= halfOfLengthOptionsArray &&
+                    computerChoseToComparison < userChoseToComparison) {
+                return 0; //loss
+            }
+            if (userChoseToComparison > halfOfLengthOptionsArray &&
+                    computerChoseToComparison > userChoseToComparison) {
+                return 2; //win
+            }
+            if (userChoseToComparison > halfOfLengthOptionsArray &&
+                    computerChoseToComparison < userChoseToComparison &&
+                    computerChoseToComparison > userChoseToComparison - halfOfLengthOptionsArray) {
+                return 0; //loss
+            }
+
         }
+
         return result;
     } // return 0 - loss, 1 - draw, 2 - win
     public static void main(String[] args) {
@@ -212,7 +225,14 @@ public class Main {
         String userName = scanner.nextLine();
         int userId = checkAndAddNewUser(listOfUsers, userName); //check if user name not exist add new and read id
         System.out.println("Hello, " + listOfUsers.get(userId).getName());
-        options.addAll(List.of(scanner.nextLine().split(","))); // adds options form user
+        String[] listOfOptions = scanner.nextLine().split(",");
+        if (listOfOptions.length > 1) {
+            options.addAll(Arrays.asList(listOfOptions)); // adds options form user
+        } else {
+            options.addAll(Arrays.asList("rock", "paper", "scissors"));
+        }
+
+
         System.out.println("Okay, let's start");
         for(;;) {
             userLine = scanner.nextLine();
