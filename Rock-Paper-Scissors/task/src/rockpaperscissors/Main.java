@@ -112,7 +112,7 @@ public class Main {
         public User(int id, String name){
             this.id = id;
             this.name = name;
-            this.score = 0;
+            this.score = 350;
         }
 
         public String getName() {
@@ -228,6 +228,7 @@ public class Main {
         int userId = checkAndAddNewUser(listOfUsers, userName); //check if user name not exist add new and read id
         System.out.println("Hello, " + listOfUsers.get(userId).getName());
         String[] listOfOptions = scanner.nextLine().split(",");
+
         if (listOfOptions.length > 1) {
             options.addAll(Arrays.asList(listOfOptions)); // adds options form user
         } else {
@@ -268,27 +269,30 @@ public class Main {
                         loss(options[computerChose]);
                     }
 */
-                    int computerChose = random.nextInt(options.size()); //computer drows 1 options
-                    switch (winDrawLoss(userLine, computerChose)) {
-                        case -1 -> {
-                            System.out.println("Something wrong"); break;
-                        }
-                        case 0 -> {
-                            loss(options.get(computerChose)); break;
-                        }
-                        case 1 -> {
-                            draw(options.get(computerChose));
-                            listOfUsers.get(userId).userDraw();
-                            break;
-                        }
-                        case 2 -> {
-                            win(options.get(computerChose));
-                            listOfUsers.get(userId).userWin();
-                            break;
-                        }
-                    }
                     if (userLine.equals("!rating")) {
                         System.out.println("Your rating: " + listOfUsers.get(userId).getScore());
+                    } else {
+                        int computerChose = random.nextInt(options.size()); //computer drows 1 options
+                        switch (winDrawLoss(userLine, computerChose)) {
+                            case -1 -> {
+                                System.out.println("Something wrong");
+                                break;
+                            }
+                            case 0 -> {
+                                loss(options.get(computerChose));
+                                break;
+                            }
+                            case 1 -> {
+                                draw(options.get(computerChose));
+                                listOfUsers.get(userId).userDraw();
+                                break;
+                            }
+                            case 2 -> {
+                                win(options.get(computerChose));
+                                listOfUsers.get(userId).userWin();
+                                break;
+                            }
+                        }
                     }
                 } else {
                     System.out.println("Invalid input");
@@ -297,8 +301,4 @@ public class Main {
         }
         System.out.println("Bye!");
     }
-
-
-
-
 }
